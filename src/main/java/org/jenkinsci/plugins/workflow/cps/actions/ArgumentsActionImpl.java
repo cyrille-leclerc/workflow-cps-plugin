@@ -102,7 +102,7 @@ public class ArgumentsActionImpl extends ArgumentsAction {
                 LOGGER.log(Level.FINE, () ->
                         "Unexpected null sensitive value for variable '" + sensitive + "', " +
                                 "sensitiveVariables: " + sensitiveVariables.stream().collect(Collectors.joining(", ")) +
-                        "variables: " + variables.keySet().stream().collect(Collectors.joining(", ")));
+                                "variables: " + variables.keySet().stream().collect(Collectors.joining(", ")));
                 continue;
             } else if (sensitiveValue.isEmpty()) {
                 continue;
