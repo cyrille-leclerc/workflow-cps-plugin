@@ -54,6 +54,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Implements {@link ArgumentsAction} by storing step arguments, with sanitization.
@@ -96,7 +97,13 @@ public class ArgumentsActionImpl extends ArgumentsAction {
         String modded = input;
         for (String sensitive : sensitiveVariables) {
             String sensitiveValue = variables.get(sensitive);
-            if (sensitiveValue.isEmpty()) {
+            if (sensitiveValue == null) {
+                LOGGER.log(Level.WARNING, () ->
+                        "Unexpected null sensitive value for variable '" + sensitive + "', " +
+                                "sensitiveVariables: " + sensitiveVariables.stream().collect(Collectors.joining(", ")) +
+                                "variables: " + variables.keySet().stream().collect(Collectors.joining(", ")));
+                continue;
+            } else if (sensitiveValue.isEmpty()) {
                 continue;
             }
             modded = modded.replace(variables.get(sensitive), "${" + sensitive + "}");
